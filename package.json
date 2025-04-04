@@ -1,0 +1,23 @@
+{
+  "name": "trusttune",
+  "version": "0.1.0",
+  "description": "Production-Ready ML Score Calibration",
+  "main": "index.js",
+  "scripts": {
+    "start": "uvicorn app:app --host 0.0.0.0 --port 8000 --reload",
+    "test": "pytest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
+  },
+  "keywords": [
+    "machine-learning",
+    "calibration",
+    "ml",
+    "ai"
+  ],
+  "author": "Dawit M Beshah",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}

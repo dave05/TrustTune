@@ -1,0 +1,64 @@
+name: GitHub Codespaces Setup
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .
+        pip install -r requirements.txt
+        pip install pytest pytest-cov
+        
+    - name: Run tests
+      run: |
+        pytest tests/
+        
+  e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .
+        pip install -r requirements.txt
+        
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install Playwright
+      run: |
+        npm ci
+        npx playwright install --with-deps
+        
+    - name: Start application in background
+      run: |
+        uvicorn app:app --host 0.0.0.0 --port 8000 &
+        sleep 5
+        
+    - name: Run Playwright tests
+      run: |
+        npx playwright test
