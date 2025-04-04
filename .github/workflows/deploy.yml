@@ -1,0 +1,34 @@
+name: Deploy to PythonAnywhere
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest
+        
+    - name: Run tests
+      run: |
+        pytest
+        
+    - name: Deploy to PythonAnywhere
+      env:
+        PA_TOKEN: ${{ secrets.PYTHONANYWHERE_TOKEN }}
+      run: |
+        curl -X POST \
+        -H "Authorization: Token ${PA_TOKEN}" \
+        https://www.pythonanywhere.com/api/v0/user/${{ secrets.PA_USERNAME }}/webapps/${{ secrets.PA_DOMAIN }}/reload/
