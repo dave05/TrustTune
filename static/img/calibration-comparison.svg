@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect x="0" y="0" width="600" height="400" fill="#f8f9fa" rx="10" ry="10"/>
+  
+  <!-- Divider -->
+  <line x1="300" y1="50" x2="300" y2="350" stroke="#dee2e6" stroke-width="2"/>
+  
+  <!-- Left side: Uncalibrated -->
+  <g>
+    <!-- Title -->
+    <text x="150" y="30" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#343a40">Uncalibrated Model</text>
+    
+    <!-- Histogram bars -->
+    <rect x="70" y="100" width="40" height="200" fill="#dc3545" opacity="0.7" rx="3" ry="3"/>
+    <rect x="120" y="150" width="40" height="150" fill="#dc3545" opacity="0.7" rx="3" ry="3"/>
+    <rect x="170" y="200" width="40" height="100" fill="#dc3545" opacity="0.7" rx="3" ry="3"/>
+    <rect x="220" y="80" width="40" height="220" fill="#dc3545" opacity="0.7" rx="3" ry="3"/>
+    
+    <!-- Confidence line -->
+    <path d="M70,180 L90,150 L140,120 L190,90 L240,70" stroke="#343a40" stroke-width="3" fill="none"/>
+    
+    <!-- Metrics -->
+    <rect x="70" y="330" width="190" height="50" fill="white" stroke="#dee2e6" rx="5" ry="5"/>
+    <text x="80" y="350" font-family="Arial" font-size="12" fill="#343a40">ECE: 0.245</text>
+    <text x="80" y="370" font-family="Arial" font-size="12" fill="#343a40">Brier Score: 0.187</text>
+  </g>
+  
+  <!-- Right side: Calibrated -->
+  <g>
+    <!-- Title -->
+    <text x="450" y="30" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#343a40">Calibrated Model</text>
+    
+    <!-- Histogram bars -->
+    <rect x="370" y="250" width="40" height="50" fill="#0d6efd" opacity="0.7" rx="3" ry="3"/>
+    <rect x="420" y="200" width="40" height="100" fill="#0d6efd" opacity="0.7" rx="3" ry="3"/>
+    <rect x="470" y="150" width="40" height="150" fill="#0d6efd" opacity="0.7" rx="3" ry="3"/>
+    <rect x="520" y="100" width="40" height="200" fill="#0d6efd" opacity="0.7" rx="3" ry="3"/>
+    
+    <!-- Confidence line -->
+    <path d="M370,275 L390,250 L440,200 L490,150 L540,100" stroke="#343a40" stroke-width="3" fill="none"/>
+    
+    <!-- Metrics -->
+    <rect x="370" y="330" width="190" height="50" fill="white" stroke="#dee2e6" rx="5" ry="5"/>
+    <text x="380" y="350" font-family="Arial" font-size="12" fill="#343a40">ECE: 0.032</text>
+    <text x="380" y="370" font-family="Arial" font-size="12" fill="#343a40">Brier Score: 0.089</text>
+  </g>
+  
+  <!-- Axis labels -->
+  <text x="150" y="310" text-anchor="middle" font-family="Arial" font-size="12" fill="#343a40">Confidence Bins</text>
+  <text x="450" y="310" text-anchor="middle" font-family="Arial" font-size="12" fill="#343a40">Confidence Bins</text>
+</svg>

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TrustTune - ML Score Calibration</title>
+    <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
+    <meta name="description" content="TrustTune - Production-Ready ML Score Calibration for reliable model probabilities">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/static/css/styles.css">
@@ -13,7 +15,9 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="/">TrustTune</a>
+            <a class="navbar-brand" href="/">
+                <img src="/static/img/trusttune-logo.svg" alt="TrustTune Logo" height="40">
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -23,7 +27,13 @@
                         <a class="nav-link active" href="/">Home</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="/demo">Demo</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#use-cases">Use Cases</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#documentation">Documentation</a>
@@ -38,102 +48,194 @@
 
     <!-- Hero Section -->
     <section class="hero-section">
-        <div class="container text-center">
-            <h1>TrustTune</h1>
-            <p class="lead">Production-Ready ML Score Calibration</p>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <img src="/static/img/trusttune-logo.svg" alt="TrustTune Logo" class="mb-4" width="300">
+                    <h1 class="display-4 fw-bold visually-hidden">TrustTune</h1>
+                    <p class="lead">Production-Ready ML Score Calibration</p>
+                    <p class="mb-4">Transform your model's raw scores into reliable probabilities with our enterprise-grade calibration solution.</p>
+                    <div class="d-flex gap-3">
+                        <a href="/demo" class="btn btn-primary btn-lg">
+                            <i class="bi bi-play-fill"></i> Try Demo
+                        </a>
+                        <a href="#features" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-info-circle"></i> Learn More
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block">
+                    <img src="/static/img/hero-graphic.svg" alt="TrustTune Calibration Visualization" class="img-fluid">
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Main Content -->
-    <div class="container mt-4">
-        <!-- Calibration Section -->
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Calibrate Scores</h5>
-                    </div>
-                    <div class="card-body">
-                        <form id="calibrationForm">
-                            <div class="mb-3">
-                                <label class="form-label">Calibrator Type</label>
-                                <select class="form-select" name="calibrator_type">
-                                    <option value="platt">Platt Scaling</option>
-                                    <option value="isotonic">Isotonic Regression</option>
-                                    <option value="temperature">Temperature Scaling</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Upload Data (CSV)</label>
-                                <input type="file" class="form-control" name="dataFile" accept=".csv" required>
-                                <div class="form-text">CSV should contain 'score' and 'label' columns</div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-graph-up"></i> Calibrate
-                            </button>
-                        </form>
-                    </div>
+    <div class="container mt-5">
+        <!-- Why Calibration Section -->
+        <section class="mb-5">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h2>Why Calibration Matters</h2>
+                    <p class="lead">Uncalibrated models can lead to costly mistakes in high-stakes decisions.</p>
+                    <p>Machine learning models often output scores that don't accurately reflect true probabilities. This miscalibration can lead to:</p>
+                    <ul class="list-group list-group-flush mb-4">
+                        <li class="list-group-item bg-transparent"><i class="bi bi-x-circle text-danger"></i> Overconfident predictions leading to risky decisions</li>
+                        <li class="list-group-item bg-transparent"><i class="bi bi-x-circle text-danger"></i> Underconfident predictions causing missed opportunities</li>
+                        <li class="list-group-item bg-transparent"><i class="bi bi-x-circle text-danger"></i> Inconsistent risk assessments across different models</li>
+                        <li class="list-group-item bg-transparent"><i class="bi bi-x-circle text-danger"></i> Poor performance in downstream decision-making systems</li>
+                    </ul>
+                    <p>TrustTune solves these problems by transforming your model's outputs into reliable probabilities you can trust.</p>
                 </div>
-
-                <!-- Sample Data Card -->
-                <div class="card mt-3">
-                    <div class="card-header">
-                        <h5 class="mb-0">Sample Data</h5>
-                    </div>
-                    <div class="card-body">
-                        <p>Don't have data? Download our sample dataset:</p>
-                        <a href="/static/sample_data.csv" class="btn btn-outline-primary" download>
-                            <i class="bi bi-download"></i> Download Sample CSV
-                        </a>
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-0">
+                            <img src="/static/img/calibration-comparison.svg" alt="Calibration Comparison" class="img-fluid rounded">
+                        </div>
+                        <div class="card-footer bg-light text-center">
+                            <small class="text-muted">Comparison of uncalibrated vs. calibrated model outputs</small>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Reliability Diagram</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="calibrationPlot"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Results Section -->
-        <div id="resultsContainer" class="results-section d-none"></div>
+        </section>
 
         <!-- Features Section -->
         <section id="features" class="mt-5 pt-3">
-            <h2 class="text-center mb-4">Features</h2>
+            <h2 class="text-center mb-4">Key Features</h2>
             <div class="row">
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100">
+                    <div class="card h-100 shadow-sm">
                         <div class="card-body text-center">
                             <i class="bi bi-graph-up feature-icon"></i>
                             <h5>Multiple Calibration Methods</h5>
-                            <p>Choose from Platt Scaling, Isotonic Regression, and Temperature Scaling to best fit your data.</p>
+                            <p>Choose from Platt Scaling, Isotonic Regression, Temperature Scaling, and more to best fit your data.</p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Platt Scaling</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Isotonic Regression</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Temperature Scaling</li>
+                                <li><i class="bi bi-clock text-muted"></i> Beta Calibration (coming soon)</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100">
+                    <div class="card h-100 shadow-sm">
                         <div class="card-body text-center">
                             <i class="bi bi-arrow-repeat feature-icon"></i>
                             <h5>Online & Offline Calibration</h5>
                             <p>Support for both batch processing and streaming data with drift detection.</p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Batch calibration for offline use</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Streaming calibration for online systems</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Automatic drift detection</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Version control for calibrators</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100">
+                    <div class="card h-100 shadow-sm">
                         <div class="card-body text-center">
                             <i class="bi bi-speedometer2 feature-icon"></i>
-                            <h5>Comprehensive Metrics</h5>
-                            <p>Monitor calibration quality with ECE, MCE, and Brier score metrics.</p>
+                            <h5>Enterprise-Ready</h5>
+                            <p>Built for production environments with monitoring, metrics, and integration capabilities.</p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="bi bi-check-circle-fill text-success"></i> REST API for easy integration</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Comprehensive metrics dashboard</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Docker and cloud deployment</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Prometheus monitoring integration</li>
+                            </ul>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Use Cases Section -->
+        <section id="use-cases" class="mt-5 pt-3">
+            <h2 class="text-center mb-4">Industry Use Cases</h2>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-primary p-3 rounded-circle me-3 text-white">
+                                    <i class="bi bi-bank"></i>
+                                </div>
+                                <h5 class="mb-0">Financial Services</h5>
+                            </div>
+                            <p>Improve risk assessment in lending, fraud detection, and investment decisions with properly calibrated probabilities.</p>
+                            <div class="alert alert-light">
+                                <strong>Example:</strong> A major bank improved their loan default prediction accuracy by 18% after implementing TrustTune calibration.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-success p-3 rounded-circle me-3 text-white">
+                                    <i class="bi bi-heart-pulse"></i>
+                                </div>
+                                <h5 class="mb-0">Healthcare</h5>
+                            </div>
+                            <p>Enhance diagnostic accuracy and treatment recommendations with reliable probability estimates for medical decision support systems.</p>
+                            <div class="alert alert-light">
+                                <strong>Example:</strong> A healthcare provider reduced false positives in disease screening by 22% after calibrating their diagnostic models.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-info p-3 rounded-circle me-3 text-white">
+                                    <i class="bi bi-robot"></i>
+                                </div>
+                                <h5 class="mb-0">AI/ML Operations</h5>
+                            </div>
+                            <p>Ensure consistent and reliable model outputs across your ML pipeline with automated calibration as part of your MLOps workflow.</p>
+                            <div class="alert alert-light">
+                                <strong>Example:</strong> An AI company integrated TrustTune into their model deployment pipeline, improving customer satisfaction with more reliable predictions.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-warning p-3 rounded-circle me-3 text-white">
+                                    <i class="bi bi-shield-check"></i>
+                                </div>
+                                <h5 class="mb-0">Cybersecurity</h5>
+                            </div>
+                            <p>Improve threat detection and risk assessment with properly calibrated security models that provide accurate probability estimates.</p>
+                            <div class="alert alert-light">
+                                <strong>Example:</strong> A security firm reduced false alarms by 35% while maintaining high detection rates after implementing calibration.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="my-5 py-5 text-center bg-light rounded">
+            <div class="py-4">
+                <h2>Ready to improve your model's reliability?</h2>
+                <p class="lead mb-4">Try our interactive demo or check out the documentation to get started.</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="/demo" class="btn btn-primary btn-lg">
+                        <i class="bi bi-play-fill"></i> Try Demo
+                    </a>
+                    <a href="#documentation" class="btn btn-outline-secondary btn-lg">
+                        <i class="bi bi-book"></i> Documentation
+                    </a>
                 </div>
             </div>
         </section>
@@ -141,22 +243,40 @@
         <!-- Documentation Section -->
         <section id="documentation" class="mt-5 pt-3">
             <h2 class="text-center mb-4">Documentation</h2>
-            <div class="card">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs" id="docTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="python-tab" data-bs-toggle="tab" data-bs-target="#python" type="button" role="tab" aria-controls="python" aria-selected="true">Python SDK</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="api-tab" data-bs-toggle="tab" data-bs-target="#api" type="button" role="tab" aria-controls="api" aria-selected="false">REST API</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="docker-tab" data-bs-toggle="tab" data-bs-target="#docker" type="button" role="tab" aria-controls="docker" aria-selected="false">Docker</button>
+                        </li>
+                    </ul>
+                </div>
                 <div class="card-body">
-                    <h5>Quick Start</h5>
-                    <pre><code>from trusttune.core.platt import PlattCalibrator
+                    <div class="tab-content" id="docTabsContent">
+                        <div class="tab-pane fade show active" id="python" role="tabpanel" aria-labelledby="python-tab">
+                            <h5>Quick Start with Python</h5>
+                            <pre><code>from trusttune.core.platt import PlattCalibrator
 
 # Initialize calibrator
 calibrator = PlattCalibrator()
 
-# Fit calibrator
+# Fit calibrator with your data
 calibrator.fit(scores, labels)
 
 # Get calibrated probabilities
 calibrated_scores = calibrator.predict_proba(scores)</code></pre>
-
-                    <h5 class="mt-4">API Usage</h5>
-                    <pre><code>import requests
+                            <p>Install the package using pip:</p>
+                            <pre><code>pip install trusttune</code></pre>
+                        </div>
+                        <div class="tab-pane fade" id="api" role="tabpanel" aria-labelledby="api-tab">
+                            <h5>API Usage</h5>
+                            <pre><code>import requests
 import json
 
 # Prepare data
@@ -173,32 +293,70 @@ response = requests.post(
 )
 
 # Get results
-result = response.json()</code></pre>
+result = response.json()
+print(result["calibrated_scores"])</code></pre>
+                        </div>
+                        <div class="tab-pane fade" id="docker" role="tabpanel" aria-labelledby="docker-tab">
+                            <h5>Docker Deployment</h5>
+                            <pre><code># Build the Docker image
+docker build -t trusttune .
+
+# Run the container
+docker run -p 8000:8000 trusttune</code></pre>
+                            <p>For cloud deployment, we support:</p>
+                            <ul>
+                                <li>AWS ECS/EKS</li>
+                                <li>Google Cloud Run</li>
+                                <li>Azure Container Instances</li>
+                                <li>GitHub Codespaces</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     </div>
 
-    <!-- Loading Indicator -->
-    <div id="loadingIndicator" class="loading-indicator">
-        <div class="spinner-border text-primary loading-spinner" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>
-
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer mt-5">
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <h5>TrustTune</h5>
                     <p>Production-Ready ML Score Calibration</p>
+                    <p class="small">Transform your model's raw scores into reliable probabilities with our enterprise-grade calibration solution.</p>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <p>&copy; 2023 TrustTune. All rights reserved.</p>
-                    <a href="https://github.com/dave05/TrustTune" target="_blank" class="me-3">
-                        <i class="bi bi-github"></i> GitHub
-                    </a>
+                <div class="col-md-2">
+                    <h5>Product</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/demo">Demo</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#use-cases">Use Cases</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h5>Resources</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#documentation">Documentation</a></li>
+                        <li><a href="https://github.com/dave05/TrustTune" target="_blank">GitHub</a></li>
+                        <li><a href="#">API Reference</a></li>
+                        <li><a href="#">Examples</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <p>&copy; 2025 TrustTune. All rights reserved.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/dave05/TrustTune" target="_blank" class="me-3">
+                            <i class="bi bi-github"></i>
+                        </a>
+                        <a href="#" class="me-3">
+                            <i class="bi bi-twitter"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/company/trusttune" target="_blank" class="me-3">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

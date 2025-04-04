@@ -66,6 +66,11 @@ async def home(request: Request):
     """Render the home page."""
     return templates.TemplateResponse("index.html", {"request": request})
 
+@app.get("/demo")
+async def demo(request: Request):
+    """Render the demo page."""
+    return templates.TemplateResponse("demo.html", {"request": request})
+
 @app.post("/calibrate")
 async def calibrate(request: CalibrationRequest):
     """Calibrate probability scores."""
@@ -88,17 +93,17 @@ async def calibrate(request: CalibrationRequest):
 
         scores = np.array(request.scores)
         labels = np.array(request.labels)
-        
+
         # Fit calibrator
         calibrator.fit(scores, labels)
-        
+
         # Get calibrated scores
         calibrated_scores = calibrator.predict_proba(scores)
-        
+
         # Calculate metrics
         ece, _, _, _ = expected_calibration_error(labels, scores)
         bs = brier_score(labels, scores)
-        
+
         return {
             "calibrated_scores": calibrated_scores.tolist(),
             "metrics": {

@@ -3,41 +3,54 @@
 document.addEventListener('DOMContentLoaded', function() {
     // DOM elements
     const calibrationForm = document.getElementById('calibrationForm');
-    const fileInput = document.querySelector('input[type="file"]');
+    const fileInput = document.querySelector('input[name="dataFile"]');
     const resultsContainer = document.getElementById('resultsContainer');
     const calibrationPlot = document.getElementById('calibrationPlot');
     const loadingIndicator = document.getElementById('loadingIndicator');
-    
+
+    // Log elements to help debug
+    console.log('Form:', calibrationForm);
+    console.log('File input:', fileInput);
+    console.log('Results container:', resultsContainer);
+    console.log('Plot:', calibrationPlot);
+    console.log('Loading indicator:', loadingIndicator);
+
     // Event listeners
     if (calibrationForm) {
         calibrationForm.addEventListener('submit', handleCalibrationSubmit);
     }
-    
+
     // Handle form submission
     async function handleCalibrationSubmit(event) {
         event.preventDefault();
-        
+
         if (!fileInput.files.length) {
             showMessage('Please select a CSV file', 'error');
             return;
         }
-        
+
         showLoading(true);
-        
+
         try {
             const formData = new FormData(calibrationForm);
             const calibratorType = formData.get('calibrator_type');
-            
+
             // Parse CSV file
             const file = fileInput.files[0];
             const data = await parseCSV(file);
-            
+
             if (!data || !data.scores || !data.labels) {
                 showMessage('Invalid CSV format. Please ensure it contains "score" and "label" columns.', 'error');
                 showLoading(false);
                 return;
             }
-            
+
+            console.log('Sending data to API:', {
+                scores: data.scores,
+                labels: data.labels,
+                calibrator_type: calibratorType
+            });
+
             // Call API
             const response = await fetch('/calibrate', {
                 method: 'POST',
@@ -50,80 +63,101 @@ document.addEventListener('DOMContentLoaded', function() {
                     calibrator_type: calibratorType
                 })
             });
-            
+
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.detail || 'Calibration failed');
             }
-            
+
             const result = await response.json();
-            
+
             // Display results
             displayResults(result, data);
-            
+
             // Create reliability diagram
             createReliabilityDiagram(data.scores, result.calibrated_scores, data.labels);
-            
+
         } catch (error) {
             console.error('Error:', error);
-            showMessage(error.message || 'An error occurred during calibration', 'error');
+            let errorMessage = error.message || 'An error occurred during calibration';
+
+            // Try to extract more detailed error information if available
+            if (error.detail && typeof error.detail === 'object' && error.detail.error) {
+                errorMessage = error.detail.error;
+            }
+
+            showMessage(errorMessage, 'error');
+
+            // Add error details to the page for debugging
+            const errorDetails = document.createElement('div');
+            errorDetails.className = 'alert alert-danger mt-3';
+            errorDetails.innerHTML = `
+                <h5>Error Details (for debugging):</h5>
+                <pre>${JSON.stringify(error, null, 2)}</pre>
+            `;
+
+            if (resultsContainer) {
+                resultsContainer.innerHTML = '';
+                resultsContainer.classList.remove('d-none');
+                resultsContainer.appendChild(errorDetails);
+            }
         } finally {
             showLoading(false);
         }
     }
-    
+
     // Parse CSV file
     async function parseCSV(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            
+
             reader.onload = function(event) {
                 const csvData = event.target.result;
                 const lines = csvData.split('\n');
                 const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
-                
+
                 const scoreIndex = headers.indexOf('score');
                 const labelIndex = headers.indexOf('label');
-                
+
                 if (scoreIndex === -1 || labelIndex === -1) {
                     reject(new Error('CSV must contain "score" and "label" columns'));
                     return;
                 }
-                
+
                 const scores = [];
                 const labels = [];
-                
+
                 for (let i = 1; i < lines.length; i++) {
                     if (!lines[i].trim()) continue;
-                    
+
                     const values = lines[i].split(',');
                     const score = parseFloat(values[scoreIndex]);
                     const label = parseInt(values[labelIndex], 10);
-                    
+
                     if (!isNaN(score) && !isNaN(label)) {
                         scores.push(score);
                         labels.push(label);
                     }
                 }
-                
+
                 resolve({ scores, labels });
             };
-            
+
             reader.onerror = function() {
                 reject(new Error('Failed to read file'));
             };
-            
+
             reader.readAsText(file);
         });
     }
-    
+
     // Display calibration results
     function displayResults(result, originalData) {
         if (!resultsContainer) return;
-        
+
         resultsContainer.innerHTML = '';
         resultsContainer.classList.remove('d-none');
-        
+
         // Create metrics section
         const metricsCard = document.createElement('div');
         metricsCard.className = 'card mb-4';
@@ -142,15 +176,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         `;
-        
+
         // Create data preview section
         const dataPreview = document.createElement('div');
         dataPreview.className = 'card';
-        
+
         // Create table with original and calibrated scores
         let tableRows = '';
         const maxRows = Math.min(10, result.calibrated_scores.length);
-        
+
         for (let i = 0; i < maxRows; i++) {
             tableRows += `
                 <tr>
@@ -161,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </tr>
             `;
         }
-        
+
         dataPreview.innerHTML = `
             <div class="card-header">
                 <h5 class="mb-0">Data Preview (First ${maxRows} rows)</h5>
@@ -184,29 +218,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         `;
-        
+
         resultsContainer.appendChild(metricsCard);
         resultsContainer.appendChild(dataPreview);
     }
-    
+
     // Create reliability diagram
     function createReliabilityDiagram(originalScores, calibratedScores, labels) {
         if (!calibrationPlot) return;
-        
+
         // Create bins for reliability diagram
         const numBins = 10;
         const binSize = 1.0 / numBins;
-        
+
         // Function to calculate bin statistics
         function calculateBinStats(scores, labels) {
             const bins = Array(numBins).fill().map(() => ({ count: 0, positive: 0 }));
-            
+
             scores.forEach((score, i) => {
                 const binIndex = Math.min(Math.floor(score / binSize), numBins - 1);
                 bins[binIndex].count++;
                 bins[binIndex].positive += labels[i];
             });
-            
+
             // Calculate fraction of positives and confidence for each bin
             return bins.map((bin, i) => {
                 const confidence = (i + 0.5) * binSize;
@@ -214,18 +248,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 return { confidence, accuracy, count: bin.count };
             });
         }
-        
+
         const originalBins = calculateBinStats(originalScores, labels);
         const calibratedBins = calculateBinStats(calibratedScores, labels);
-        
+
         // Filter out empty bins
         const filteredOriginalBins = originalBins.filter(bin => bin.count > 0);
         const filteredCalibratedBins = calibratedBins.filter(bin => bin.count > 0);
-        
+
         // Create perfect calibration line
         const perfectX = [0, 1];
         const perfectY = [0, 1];
-        
+
         // Create plot
         const data = [
             {
@@ -250,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 line: { dash: 'dash', color: 'gray' }
             }
         ];
-        
+
         const layout = {
             title: 'Reliability Diagram',
             xaxis: { title: 'Confidence', range: [0, 1] },
@@ -260,17 +294,21 @@ document.addEventListener('DOMContentLoaded', function() {
             height: 400,
             margin: { l: 50, r: 50, t: 50, b: 50 }
         };
-        
+
         Plotly.newPlot(calibrationPlot, data, layout);
     }
-    
+
     // Show/hide loading indicator
     function showLoading(isLoading) {
         if (loadingIndicator) {
-            loadingIndicator.style.display = isLoading ? 'block' : 'none';
+            if (isLoading) {
+                loadingIndicator.classList.add('show');
+            } else {
+                loadingIndicator.classList.remove('show');
+            }
         }
     }
-    
+
     // Show message
     function showMessage(message, type = 'info') {
         const alertDiv = document.createElement('div');
@@ -279,11 +317,11 @@ document.addEventListener('DOMContentLoaded', function() {
             ${message}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         `;
-        
+
         const container = document.querySelector('.container');
         if (container) {
             container.insertBefore(alertDiv, container.firstChild);
-            
+
             // Auto-dismiss after 5 seconds
             setTimeout(() => {
                 alertDiv.classList.remove('show');
