@@ -1,0 +1,8 @@
+theme: jekyll-theme-minimal
+title: TrustTune.io
+description: Production-Ready ML Score Calibration
+url: https://trusttune.io
+baseurl: ""
+github:
+  is_project_page: true
+  repository_url: https://github.com/dave05/TrustTune
