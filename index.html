@@ -32,7 +32,7 @@
                         <a class="nav-link active" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="https://musical-sniffle-pp7x75w4xv377rr-8000.app.github.dev/demo" target="_blank">Demo</a>
+                        <a class="nav-link" href="https://dawitbeshah.pythonanywhere.com/demo" target="_blank">Demo</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#features">Features</a>
@@ -61,7 +61,7 @@
                     <p class="lead">Production-Ready ML Score Calibration</p>
                     <p class="mb-4">Transform your model's raw scores into reliable probabilities with our enterprise-grade calibration solution.</p>
                     <div class="d-flex gap-3">
-                        <a href="https://musical-sniffle-pp7x75w4xv377rr-8000.app.github.dev/demo" target="_blank" class="btn btn-primary btn-lg">
+                        <a href="https://dawitbeshah.pythonanywhere.com/demo" target="_blank" class="btn btn-primary btn-lg">
                             <i class="bi bi-play-fill"></i> Try Demo
                         </a>
                         <a href="#features" class="btn btn-outline-light btn-lg">
@@ -235,7 +235,7 @@
                 <h2>Ready to improve your model's reliability?</h2>
                 <p class="lead mb-4">Try our interactive demo or check out the documentation to get started.</p>
                 <div class="d-flex justify-content-center gap-3">
-                    <a href="https://musical-sniffle-pp7x75w4xv377rr-8000.app.github.dev/demo" target="_blank" class="btn btn-primary btn-lg">
+                    <a href="https://dawitbeshah.pythonanywhere.com/demo" target="_blank" class="btn btn-primary btn-lg">
                         <i class="bi bi-play-fill"></i> Try Demo
                     </a>
                     <a href="#documentation" class="btn btn-outline-secondary btn-lg">
@@ -293,7 +293,7 @@ data = {
 
 # Call API
 response = requests.post(
-    "https://musical-sniffle-pp7x75w4xv377rr-8000.app.github.dev/calibrate",
+    "https://dawitbeshah.pythonanywhere.com/calibrate",
     json=data
 )
 
@@ -335,7 +335,7 @@ docker run -p 8000:8000 trusttune</code></pre>
                     <h5>Product</h5>
                     <ul class="list-unstyled">
                         <li><a href="/">Home</a></li>
-                        <li><a href="https://musical-sniffle-pp7x75w4xv377rr-8000.app.github.dev/demo" target="_blank">Demo</a></li>
+                        <li><a href="https://dawitbeshah.pythonanywhere.com/demo" target="_blank">Demo</a></li>
                         <li><a href="#features">Features</a></li>
                         <li><a href="#use-cases">Use Cases</a></li>
                     </ul>
@@ -370,5 +370,39 @@ docker run -p 8000:8000 trusttune</code></pre>
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="static/js/main.js"></script>
+    <script>
+        // Check if the backend is available
+        document.addEventListener('DOMContentLoaded', function() {
+            const backendUrl = 'https://dawitbeshah.pythonanywhere.com/health';
+            const demoLinks = document.querySelectorAll('a[href*="pythonanywhere.com/demo"]');
+            const statusBadge = document.createElement('span');
+            statusBadge.className = 'badge bg-secondary ms-2';
+            statusBadge.textContent = 'Checking...';
+
+            if (demoLinks.length > 0) {
+                demoLinks[0].appendChild(statusBadge);
+            }
+
+            fetch(backendUrl)
+                .then(response => {
+                    if (response.ok) {
+                        statusBadge.className = 'badge bg-success ms-2';
+                        statusBadge.textContent = 'Online';
+                    } else {
+                        throw new Error('Backend not available');
+                    }
+                })
+                .catch(error => {
+                    statusBadge.className = 'badge bg-danger ms-2';
+                    statusBadge.textContent = 'Offline';
+                    console.error('Backend check failed:', error);
+
+                    // Add warning to demo links
+                    demoLinks.forEach(link => {
+                        link.title = 'Backend may be offline. Free tier PythonAnywhere apps go to sleep after inactivity.';
+                    });
+                });
+        });
+    </script>
 </body>
 </html>
