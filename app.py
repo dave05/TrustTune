@@ -25,7 +25,7 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://dave05.github.io", "http://localhost:8000", "https://musical-sniffle-pp7x75w4xv377rr-8000.app.github.dev"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -39,6 +39,11 @@ templates = Jinja2Templates(directory="templates")
 
 # Mount the API
 app.mount("/api", api_app)
+
+# Health check endpoint
+@app.get("/health")
+async def health_check():
+    return {"status": "ok", "version": "0.1.0"}
 
 # Define models
 class CalibrationRequest(BaseModel):
