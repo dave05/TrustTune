@@ -58,6 +58,40 @@ docker build -t trusttune .
 docker run -p 8000:8000 trusttune
 ```
 
+## Cloud Deployment
+
+### Heroku
+
+```bash
+# Login to Heroku
+heroku login
+
+# Create a new Heroku app
+heroku create trusttune-app
+
+# Push to Heroku
+git push heroku main
+
+# Open the app
+heroku open
+```
+
+### Render
+
+1. Sign up for a [Render](https://render.com/) account
+2. Create a new Web Service
+3. Connect your GitHub repository
+4. Use the following settings:
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `uvicorn app:app --host 0.0.0.0 --port $PORT`
+
+### Railway
+
+1. Sign up for a [Railway](https://railway.app/) account
+2. Create a new project from GitHub
+3. Connect your GitHub repository
+4. Railway will automatically detect the Procfile and deploy your application
+
 ## Python Usage
 
 ```python
