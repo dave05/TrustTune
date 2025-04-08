@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: TrustTune API deployed with AWS SAM
+
+Resources:
+  TrustTuneFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: lambda_handler.handler
+      Runtime: python3.10
+      Timeout: 30
+      MemorySize: 512
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+
+Outputs:
+  TrustTuneApi:
+    Description: API Gateway endpoint URL for TrustTune
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+  TrustTuneFunction:
+    Description: Lambda Function ARN
+    Value: !GetAtt TrustTuneFunction.Arn

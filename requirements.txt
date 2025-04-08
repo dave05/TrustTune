@@ -12,3 +12,8 @@ plotly==5.14.1
 pytest==7.3.1
 pytest-cov==4.1.0
 gunicorn==20.1.0
+
+# AWS specific packages
+mangum==0.17.0  # For AWS Lambda integration
+awscli==1.29.0  # AWS Command Line Interface
+awsebcli==3.20.6  # Elastic Beanstalk CLI

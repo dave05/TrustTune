@@ -60,6 +60,58 @@ docker run -p 8000:8000 trusttune
 
 ## Cloud Deployment
 
+### AWS Elastic Beanstalk
+
+```bash
+# Install the AWS CLI and EB CLI
+pip install awscli awsebcli
+
+# Configure AWS credentials
+aws configure
+
+# Initialize Elastic Beanstalk application
+eb init -p python-3.10 trusttune
+
+# Create an environment and deploy
+eb create trusttune-env
+
+# For subsequent deployments
+eb deploy
+
+# Open the application in a browser
+eb open
+```
+
+### AWS App Runner
+
+1. Sign in to the AWS Management Console
+2. Navigate to AWS App Runner
+3. Click "Create service"
+4. Connect your GitHub repository
+5. Configure the build:
+   - Runtime: Python 3
+   - Build command: `pip install -r requirements.txt`
+   - Start command: `python application.py`
+6. Configure service settings and click "Create & deploy"
+
+### AWS Lambda with API Gateway
+
+1. Package your application using AWS Serverless Application Model (SAM):
+
+```bash
+# Install AWS SAM CLI
+pip install aws-sam-cli
+
+# Initialize SAM project
+sam init
+
+# Build the application
+sam build
+
+# Deploy the application
+sam deploy --guided
+```
+
 ### Heroku
 
 ```bash
