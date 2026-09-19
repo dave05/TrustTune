@@ -1,0 +1,85 @@
+name: Deploy to PythonAnywhere
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+        
+    - name: Deploy to PythonAnywhere
+      env:
+        PA_API_TOKEN: ${{ secrets.PYTHONANYWHERE_API_TOKEN }}
+        PA_USERNAME: ${{ secrets.PYTHONANYWHERE_USERNAME }}
+      run: |
+        # Create deployment script
+        cat > deploy.py << 'EOF'
+        import os
+        import requests
+        import time
+        
+        # Get environment variables
+        username = os.environ.get('PA_USERNAME')
+        token = os.environ.get('PA_API_TOKEN')
+        
+        if not username or not token:
+            print("Error: PYTHONANYWHERE_USERNAME and PYTHONANYWHERE_API_TOKEN must be set")
+            exit(1)
+        
+        # API endpoint
+        api_base = f"https://www.pythonanywhere.com/api/v0/user/{username}"
+        headers = {'Authorization': f'Token {token}'}
+        
+        # Pull latest code
+        print("Pulling latest code from GitHub...")
+        response = requests.post(
+            f"{api_base}/consoles/",
+            headers=headers,
+            json={"executable": "bash", "arguments": "-c 'cd ~/TrustTune && git pull'"}
+        )
+        
+        if response.status_code != 201:
+            print(f"Error pulling code: {response.status_code} {response.text}")
+            exit(1)
+        
+        console_id = response.json()['id']
+        print(f"Console ID: {console_id}")
+        
+        # Wait for the console to complete
+        for _ in range(30):  # Wait up to 30 seconds
+            response = requests.get(f"{api_base}/consoles/{console_id}/", headers=headers)
+            if not response.json()['still_running']:
+                break
+            time.sleep(1)
+        
+        # Reload the web app
+        print("Reloading web app...")
+        domain = f"{username}.pythonanywhere.com"
+        response = requests.post(
+            f"{api_base}/webapps/{domain}/reload/",
+            headers=headers
+        )
+        
+        if response.status_code == 200:
+            print("Deployment successful!")
+        else:
+            print(f"Error reloading web app: {response.status_code} {response.text}")
+            exit(1)
+        EOF
+        
+        # Run the deployment script
+        python deploy.py
