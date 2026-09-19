@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect x="0" y="0" width="600" height="400" fill="#f8f9fa" rx="10" ry="10"/>
+  
+  <!-- Grid lines -->
+  <g stroke="#e9ecef" stroke-width="1">
+    <line x1="50" y1="50" x2="50" y2="350"/>
+    <line x1="150" y1="50" x2="150" y2="350"/>
+    <line x1="250" y1="50" x2="250" y2="350"/>
+    <line x1="350" y1="50" x2="350" y2="350"/>
+    <line x1="450" y1="50" x2="450" y2="350"/>
+    <line x1="550" y1="50" x2="550" y2="350"/>
+    
+    <line x1="50" y1="50" x2="550" y2="50"/>
+    <line x1="50" y1="100" x2="550" y2="100"/>
+    <line x1="50" y1="150" x2="550" y2="150"/>
+    <line x1="50" y1="200" x2="550" y2="200"/>
+    <line x1="50" y1="250" x2="550" y2="250"/>
+    <line x1="50" y1="300" x2="550" y2="300"/>
+    <line x1="50" y1="350" x2="550" y2="350"/>
+  </g>
+  
+  <!-- Axes -->
+  <g stroke="#343a40" stroke-width="2">
+    <line x1="50" y1="350" x2="550" y2="350"/>
+    <line x1="50" y1="50" x2="50" y2="350"/>
+  </g>
+  
+  <!-- Axis labels -->
+  <text x="300" y="380" text-anchor="middle" font-family="Arial" font-size="14" fill="#343a40">Predicted Probability</text>
+  <text x="20" y="200" text-anchor="middle" font-family="Arial" font-size="14" fill="#343a40" transform="rotate(-90, 20, 200)">Actual Probability</text>
+  
+  <!-- Perfect calibration line -->
+  <line x1="50" y1="350" x2="550" y2="50" stroke="#6c757d" stroke-width="2" stroke-dasharray="5,5"/>
+  
+  <!-- Uncalibrated model curve -->
+  <path d="M50,350 Q150,100 300,80 T550,50" stroke="#dc3545" stroke-width="3" fill="none"/>
+  
+  <!-- Calibrated model curve -->
+  <path d="M50,350 Q150,250 300,200 T550,50" stroke="#0d6efd" stroke-width="3" fill="none"/>
+  
+  <!-- Legend -->
+  <rect x="400" y="70" width="120" height="80" fill="white" stroke="#dee2e6" rx="5" ry="5"/>
+  <line x1="410" y1="90" x2="440" y2="90" stroke="#dc3545" stroke-width="3"/>
+  <text x="450" y="95" font-family="Arial" font-size="12" fill="#343a40">Uncalibrated</text>
+  <line x1="410" y1="120" x2="440" y2="120" stroke="#0d6efd" stroke-width="3"/>
+  <text x="450" y="125" font-family="Arial" font-size="12" fill="#343a40">Calibrated</text>
+  
+  <!-- Title -->
+  <text x="300" y="30" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#343a40">Reliability Diagram</text>
+</svg>
